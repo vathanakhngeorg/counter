@@ -11,7 +11,7 @@ const countFile = path.join(__dirname, "count.json");
 
 // Ensure file exists
 if (!fs.existsSync(countFile)) {
-  fs.writeFileSync(countFile, JSON.stringify({ visits: 0 }, null, 2));
+  fs.writeFileSync(countFile, JSON.stringify({ homepage: 0 }, null, 2));
   console.log("✅ count.json created");
 }
 
