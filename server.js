@@ -1,34 +1,20 @@
-const express = require('express');
-const fs = require('fs');
-const cors = require('cors');
+import express from "express";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const app = express();
-const PORT = process.env.PORT || 10000;
-const DATA_FILE = './count.json';
+const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+// Fix __dirname in ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-function loadData() {
-  try {
-    const data = fs.readFileSync(DATA_FILE, 'utf8');
-    return JSON.parse(data);
-  } catch {
-    return {};
-  }
-}
+// Serve static files (your HTML, CSS, JS)
+app.use(express.static(path.join(__dirname, "public")));
 
-function saveData(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
-
-app.get('/api/count/:key', (req, res) => {
-  const key = req.params.key;
-  const data = loadData();
-
-  data[key] = (data[key] || 0) + 1;
-  saveData(data);
-
-  res.json({ key, value: data[key] });
+// Default route
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
 app.listen(PORT, () => {
